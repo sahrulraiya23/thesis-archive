@@ -23,9 +23,9 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        <button type="submit"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded">
-                            Cek Plagiarisme
+                        <button type="submit"> Cek Plagiarisme</button>
+
+
                         </button>
                     </form>
                 </div>

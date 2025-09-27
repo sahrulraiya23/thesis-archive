@@ -70,7 +70,7 @@
                                 Program Studi <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="program_study" id="program_study"
-                                value="{{ old('program_study') }}"
+                                value="{{ old('program_study', $thesis->program_study) }}"
                                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('program_study') border-red-300 @enderror"
                                 required>
                             @error('program_study')
@@ -83,8 +83,8 @@
                             <label for="year" class="block text-sm font-medium text-gray-700 mb-2">
                                 Tahun <span class="text-red-500">*</span>
                             </label>
-                            <input type="number" name="year" id="year" value="{{ old('year', date('Y')) }}"
-                                min="1900" max="{{ date('Y') + 1 }}"
+                            <input type="number" name="year" id="year"
+                                value="{{ old('year', $thesis->year) }}" min="1900" max="{{ date('Y') + 1 }}"
                                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('year') border-red-300 @enderror"
                                 required>
                             @error('year')
@@ -99,7 +99,7 @@
                             </label>
                             <textarea name="abstract" id="abstract" rows="8"
                                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('abstract') border-red-300 @enderror"
-                                required>{{ old('abstract') }}</textarea>
+                                required>{{ old('abstract', $thesis->abstract) }}</textarea>
                             @error('abstract')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -113,7 +113,7 @@
                             </a>
                             <button type="submit"
                                 class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-                                Simpan
+                                Update
                             </button>
                         </div>
                     </form>
