@@ -2,217 +2,167 @@
 
 @section('title', 'Dashboard - Sistem Pengarsipan Tugas Akhir')
 
-@section('header')
-    <h1 class="text-4xl font-bold mb-2">Selamat Datang Di Sistem Pengarsipan Tugas Akhir</h1>
-    <p class="text-xl text-white/80">Teknik Informatika - Universitas Halu Oleo</p>
-@endsection
-
 @section('content')
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Dashboard Overview</h2>
-        <p class="text-gray-600">Ringkasan sistem pengarsipan tugas akhir</p>
-        <hr class="my-4 border-gray-300">
-    </div>
+    {{-- Header Halaman --}}
+    <header class="py-10 mb-4 bg-gradient-primary-to-secondary">
+        <div class="container-xl px-4">
+            <div class="text-center">
+                <h1 class="text-white">Selamat Datang Di Sistem Pengarsipan Tugas Akhir</h1>
+                <p class="lead mb-0 text-white-50">Teknik Informatika - Universitas Halu Oleo</p>
+            </div>
+        </div>
+    </header>
 
-    @php
-        $totalThesis = App\Models\Thesis::count();
-        $thisYearThesis = App\Models\Thesis::whereYear('created_at', date('Y'))->count();
-        $thesisTypes = App\Models\Thesis::selectRaw('type, COUNT(*) as count')
-            ->groupBy('type')
-            ->pluck('count', 'type')
-            ->toArray();
-        $recentThesis = App\Models\Thesis::latest()->limit(5)->get();
-    @endphp
+    {{-- Konten Utama --}}
+    <div class="container-xl px-4">
+        @php
+            $totalThesis = App\Models\Thesis::count();
+            $thisYearThesis = App\Models\Thesis::whereYear('created_at', date('Y'))->count();
+            $thesisTypes = App\Models\Thesis::selectRaw('type, COUNT(*) as count')
+                ->groupBy('type')
+                ->pluck('count', 'type')
+                ->toArray();
+            $recentThesis = App\Models\Thesis::latest()->limit(5)->get();
+        @endphp
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Total Tugas Akhir -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 bg-blue-500 rounded-lg">
-                    <i data-feather="book" class="w-6 h-6 text-white"></i>
+        <!-- Kartu Statistik -->
+        <div class="row">
+            <div class="col-lg-6 col-xl-3 mb-4">
+                <div class="card bg-primary text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="me-3">
+                                <div class="text-white-75 small">Total Tugas Akhir</div>
+                                <div class="text-lg fw-bold">{{ $totalThesis }}</div>
+                            </div>
+                            <i class="feather-xl" data-feather="book"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Total Tugas Akhir</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $totalThesis }}</p>
+            </div>
+            <div class="col-lg-6 col-xl-3 mb-4">
+                <div class="card bg-success text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="me-3">
+                                <div class="text-white-75 small">Tahun {{ date('Y') }}</div>
+                                <div class="text-lg fw-bold">{{ $thisYearThesis }}</div>
+                            </div>
+                            <i class="feather-xl" data-feather="calendar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-3 mb-4">
+                <div class="card bg-warning text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="me-3">
+                                <div class="text-white-75 small">Skripsi</div>
+                                <div class="text-lg fw-bold">{{ $thesisTypes['skripsi'] ?? 0 }}</div>
+                            </div>
+                            <i class="feather-xl" data-feather="file-text"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-3 mb-4">
+                <div class="card bg-danger text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="me-3">
+                                <div class="text-white-75 small">Tesis</div>
+                                <div class="text-lg fw-bold">{{ $thesisTypes['tesis'] ?? 0 }}</div>
+                            </div>
+                            <i class="feather-xl" data-feather="award"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tahun Ini -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 bg-green-500 rounded-lg">
-                    <i data-feather="calendar" class="w-6 h-6 text-white"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Tahun {{ date('Y') }}</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $thisYearThesis }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Skripsi -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 bg-purple-500 rounded-lg">
-                    <i data-feather="file-text" class="w-6 h-6 text-white"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Skripsi</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $thesisTypes['skripsi'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tesis -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 bg-orange-500 rounded-lg">
-                    <i data-feather="award" class="w-6 h-6 text-white"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Tesis</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $thesisTypes['tesis'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Recent Thesis -->
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                <div class="p-6 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                        <i data-feather="clock" class="w-5 h-5 mr-2"></i>
-                        Tugas Akhir Terbaru
-                    </h3>
-                </div>
-                <div class="p-6">
-                    @if ($recentThesis->count() > 0)
-                        <div class="space-y-4">
-                            @foreach ($recentThesis as $thesis)
-                                <div class="flex items-start space-x-4 p-4 hover:bg-gray-50 rounded-lg transition-colors">
-                                    <div class="flex-shrink-0">
-                                        <div
-                                            class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                            <i data-feather="file-text" class="w-5 h-5 text-white"></i>
+        <!-- Grid Konten Utama -->
+        <div class="row">
+            <!-- Kolom Kiri: Tugas Akhir Terbaru -->
+            <div class="col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-header"><i class="me-2" data-feather="clock"></i>Tugas Akhir Terbaru</div>
+                    <div class="card-body">
+                        @if ($recentThesis->count() > 0)
+                            <div class="list-group list-group-flush">
+                                @foreach ($recentThesis as $thesis)
+                                    <a href="{{ route('public.thesis.show', $thesis) }}"
+                                        class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">{{ Str::limit($thesis->title, 80) }}</h6>
+                                            <small class="text-muted">{{ $thesis->created_at->diffForHumans() }}</small>
                                         </div>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-sm font-medium text-gray-900 mb-1">
-                                            <a href="{{ route('public.thesis.show', $thesis) }}"
-                                                class="hover:text-blue-600 transition-colors">
-                                                {{ Str::limit($thesis->title, 80) }}
-                                            </a>
-                                        </h4>
-                                        <p class="text-sm text-gray-600 mb-2">
-                                            {{ $thesis->author }} • {{ $thesis->program_study }}
-                                        </p>
-                                        <div class="flex items-center space-x-3">
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                {{ ucfirst($thesis->type) }}
-                                            </span>
-                                            <span class="text-xs text-gray-500">{{ $thesis->year }}</span>
-                                            <span
-                                                class="text-xs text-gray-500">{{ $thesis->created_at->diffForHumans() }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <div class="mt-6 text-center">
-                            <a href="{{ route('public.thesis.index') }}"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors">
-                                Lihat Semua Tugas Akhir
-                                <i data-feather="arrow-right" class="w-4 h-4 ml-2"></i>
-                            </a>
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <i data-feather="book" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
-                            <p class="text-gray-500">Belum ada tugas akhir yang tersedia</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions & Stats -->
-        <div class="space-y-6">
-            <!-- Quick Actions -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                <div class="p-6 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                        <i data-feather="zap" class="w-5 h-5 mr-2"></i>
-                        Quick Actions
-                    </h3>
-                </div>
-                <div class="p-6">
-                    <div class="space-y-3">
-                        <a href="{{ route('public.thesis.index') }}"
-                            class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                            <i data-feather="search" class="w-4 h-4 mr-3 text-blue-500"></i>
-                            Jelajahi Tugas Akhir
-                        </a>
-                        <a href="{{ route('plagiarism.check') }}"
-                            class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                            <i data-feather="shield" class="w-4 h-4 mr-3 text-green-500"></i>
-                            Cek Plagiarisme Judul
-                        </a>
-                        @if (Auth::user()->role === 'admin')
-                            <a href="{{ route('admin.thesis.create') }}"
-                                class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                <i data-feather="plus" class="w-4 h-4 mr-3 text-purple-500"></i>
-                                Tambah Tugas Akhir
-                            </a>
-                            <a href="{{ route('admin.thesis.index') }}"
-                                class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                <i data-feather="settings" class="w-4 h-4 mr-3 text-orange-500"></i>
-                                Kelola Data
-                            </a>
+                                        <p class="mb-1 small">{{ $thesis->author }} • {{ $thesis->program_study }}</p>
+                                        <small><span
+                                                class="badge bg-primary bg-opacity-25 text-primary">{{ ucfirst($thesis->type) }}</span></small>
+                                    </a>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-4">
+                                <p class="text-muted">Belum ada tugas akhir yang tersedia.</p>
+                            </div>
                         @endif
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <a href="{{ route('public.thesis.index') }}">Lihat Semua Tugas Akhir →</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Distribution Chart -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                <div class="p-6 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                        <i data-feather="pie-chart" class="w-5 h-5 mr-2"></i>
-                        Distribusi Jenis
-                    </h3>
+            <!-- Kolom Kanan: Quick Actions & Distribusi -->
+            <div class="col-lg-4 mb-4">
+                <!-- Quick Actions -->
+                <div class="card mb-4">
+                    <div class="card-header"><i class="me-2" data-feather="zap"></i>Aksi Cepat</div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <a href="{{ route('public.thesis.index') }}" class="list-group-item list-group-item-action"><i
+                                    class="me-2" data-feather="search"></i>Jelajahi Tugas Akhir</a>
+                            <a href="{{ route('plagiarism.check') }}" class="list-group-item list-group-item-action"><i
+                                    class="me-2" data-feather="shield"></i>Cek Plagiarisme</a>
+                            @if (Auth::user()->role === 'admin')
+                                <a href="{{ route('admin.thesis.create') }}"
+                                    class="list-group-item list-group-item-action"><i class="me-2"
+                                        data-feather="plus"></i>Tambah Tugas Akhir</a>
+                                <a href="{{ route('admin.thesis.index') }}"
+                                    class="list-group-item list-group-item-action"><i class="me-2"
+                                        data-feather="settings"></i>Kelola Data</a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-                <div class="p-6">
-                    @if (!empty($thesisTypes))
-                        <div class="space-y-4">
+
+                <!-- Distribusi Jenis -->
+                <div class="card">
+                    <div class="card-header"><i class="me-2" data-feather="pie-chart"></i>Distribusi Jenis</div>
+                    <div class="card-body">
+                        @if (!empty($thesisTypes))
                             @foreach ($thesisTypes as $type => $count)
                                 @php
                                     $percentage = $totalThesis > 0 ? round(($count / $totalThesis) * 100, 1) : 0;
                                 @endphp
-                                <div>
-                                    <div class="flex justify-between items-center mb-1">
-                                        <span class="text-sm font-medium text-gray-900">{{ ucfirst($type) }}</span>
-                                        <span class="text-sm text-gray-600">{{ $count }}
-                                            ({{ $percentage }}%)</span>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="small">{{ ucfirst($type) }}</span>
+                                        <span class="small">{{ $count }} ({{ $percentage }}%)</span>
                                     </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
-                                            style="width: {{ $percentage }}%"></div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-primary" role="progressbar"
+                                            style="width: {{ $percentage }}%" aria-valuenow="{{ $percentage }}"
+                                            aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-4">
-                            <p class="text-gray-500 text-sm">Tidak ada data untuk ditampilkan</p>
-                        </div>
-                    @endif
+                        @else
+                            <p class="text-center small text-muted">Tidak ada data untuk ditampilkan.</p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

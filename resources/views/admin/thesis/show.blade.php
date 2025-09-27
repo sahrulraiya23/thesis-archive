@@ -1,79 +1,74 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Detail Tugas Akhir (Admin)
-            </h2>
-            <div class="space-x-2">
-                <a href="{{ route('admin.thesis.edit', $thesis) }}"
-                    class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                    Edit
-                </a>
-                <a href="{{ route('admin.thesis.index') }}"
-                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    Kembali
-                </a>
+@extends('layouts.admin')
+
+@section('title', 'Detail Tugas Akhir (Admin)')
+
+@section('content')
+    {{-- Header Halaman --}}
+    <header class.="py-10 mb-4 bg-gradient-primary-to-secondary">
+        <div class="container-xl px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="text-white">Detail Tugas Akhir</h1>
+                    <p class="lead mb-0 text-white-50">Tinjau detail data tugas akhir</p>
+                </div>
+                <div>
+                    <a href="{{ route('admin.thesis.edit', $thesis) }}" class="btn btn-warning">
+                        <i class="me-2" data-feather="edit-2"></i>Edit
+                    </a>
+                    <a href="{{ route('admin.thesis.index') }}" class="btn btn-light">
+                        <i class="me-2" data-feather="arrow-left"></i>Kembali
+                    </a>
+                </div>
             </div>
         </div>
-    </x-slot>
+    </header>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <!-- Header Info -->
-                    <div class="border-b border-gray-200 pb-6 mb-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center">
+    {{-- Konten Utama --}}
+    <div class="container-xl px-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
                                 <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                                    {{ ucfirst($thesis->type) }}
-                                </span>
-                                <span class="ml-3 text-sm text-gray-500">{{ $thesis->year }}</span>
+                                    class="badge bg-primary bg-opacity-25 text-primary">{{ ucfirst($thesis->type) }}</span>
+                                <span class="text-muted ms-2"><i class="me-1"
+                                        data-feather="calendar"></i>{{ $thesis->year }}</span>
                             </div>
-                            <div class="text-sm text-gray-500">
-                                Dibuat: {{ $thesis->created_at->format('d M Y H:i') }}
-                            </div>
+                            <span class="text-muted small">Dibuat: {{ $thesis->created_at->format('d M Y H:i') }}</span>
                         </div>
-                        <h1 class="text-3xl font-bold text-gray-900 mb-4">
-                            {{ $thesis->title }}
-                        </h1>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Penulis</p>
-                                <p class="text-lg text-gray-900">{{ $thesis->author }}</p>
+                        <h1 class="card-title">{{ $thesis->title }}</h1>
+                        <div class="row gx-4 mt-4">
+                            <div class="col-md-6">
+                                <p class="small text-muted mb-0">Penulis</p>
+                                <p class="fw-bold">{{ $thesis->author }}</p>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Program Studi</p>
-                                <p class="text-lg text-gray-900">{{ $thesis->program_study }}</p>
+                            <div class="col-md-6">
+                                <p class="small text-muted mb-0">Program Studi</p>
+                                <p class="fw-bold">{{ $thesis->program_study }}</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Abstract -->
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Abstrak</h2>
-                        <div class="prose max-w-none text-gray-700 leading-relaxed">
-                            {!! nl2br(e($thesis->abstract)) !!}
+                    <div class="card-body p-4">
+                        <h4 class="mb-3"><i class="me-2" data-feather="file-text"></i>Abstrak</h4>
+                        <div class="bg-light p-3 rounded" style="text-align: justify;">
+                            <p>{!! nl2br(e($thesis->abstract)) !!}</p>
                         </div>
                     </div>
-
-                    <!-- Actions -->
-                    <div class="mt-8 pt-6 border-t border-gray-200">
-                        <div class="flex justify-between">
+                    <div class="card-footer p-4 bg-transparent">
+                        <div class="d-flex justify-content-between align-items-center">
                             <form action="{{ route('admin.thesis.destroy', $thesis) }}" method="POST"
                                 onsubmit="return confirm('Yakin ingin menghapus tugas akhir ini? Aksi ini tidak dapat dibatalkan.')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit"
-                                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                    Hapus Tugas Akhir
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="me-2" data-feather="trash-2"></i>Hapus Tugas Akhir
                                 </button>
                             </form>
-
                             <a href="{{ route('public.thesis.show', $thesis) }}" target="_blank"
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Lihat di Halaman Publik
+                                class="btn btn-outline-primary">
+                                <i class="me-2" data-feather="external-link"></i>Lihat di Halaman Publik
                             </a>
                         </div>
                     </div>
@@ -81,4 +76,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

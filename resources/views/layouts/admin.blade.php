@@ -1,77 +1,59 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-    <title>@yield('title', 'Sistem Pengarsipan Tugas Akhir')</title>
+    {{-- Judul Halaman Dinamis --}}
+    <title>@yield('title', 'Dashboard') - Sistem Arsip TA</title>
 
-    <!-- Tailwind CSS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- (PERBAIKAN 1) Menggunakan asset() untuk memuat CSS --}}
+    <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet" />
 
-    <!-- Font Awesome -->
-    <script src="https:// Authenticated routes
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    {{-- (PERBAIKAN 2) Menggunakan asset() untuk memuat Favicon --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon.png') }}" />
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    {{-- Script untuk Ikon (FontAwesome & Feather) dari CDN --}}
+    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous">
+    </script>
+</head>
 
-// Admin routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('thesis', AdminThesisController::class);
-});
+<body class="nav-fixed">
 
-require __DIR__.'/auth.php';
-?> ?>
+    {{-- Memanggil Header --}}
+    @include('layouts.partials.header')
 
-document.addEventListener('DOMContentLoaded', function() {
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidenav = document.querySelector('.sidenav');
-    
-    // Check if mobile
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile) {
-        document.body.classList.add('sidenav-toggle');
-    }
-    
-    sidebarToggle.addEventListener('click', function() {
-        if (isMobile) {
-            sidenav.classList.toggle('show');
-        } else {
-            document.body.classList.toggle('sidenav-toggle');
-        }
-    });
-    
-    // Close sidebar when clicking outside on mobile
-    if (isMobile) {
-        document.addEventListener('click', function(e) {
-            if (!sidenav.contains(e.target) && !sidebarToggle.contains(e.target)) {
-                sidenav.classList.remove('show');
-            }
-        });
-    }
-    
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        const isMobileNow = window.innerWidth <= 768;
-        
-        if (isMobileNow && !isMobile) {
-            document.body.classList.add('sidenav-toggle');
-            sidenav.classList.remove('show');
-        } else if (!isMobileNow && isMobile) {
-            document.body.classList.remove('sidenav-toggle');
-            sidenav.classList.remove('show');
-        }
-    });
-});
+    <div id="layoutSidenav">
+        {{-- Memanggil Sidebar --}}
+        @include('layouts.partials.sidebar')
+
+        <div id="layoutSidenav_content">
+            <main>
+                {{-- Konten Utama Halaman --}}
+                @yield('content')
+            </main>
+
+            {{-- Memanggil Footer --}}
+            @include('layouts.partials.footer')
+        </div>
+    </div>
+
+    {{-- Script JavaScript Utama --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+
+    {{-- (PERBAIKAN 3) Inisialisasi Feather Icons --}}
+    <script>
+        feather.replace();
+    </script>
+
+</body>
+
+</html>

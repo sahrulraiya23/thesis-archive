@@ -1,124 +1,120 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Tambah Tugas Akhir
-            </h2>
-            <a href="{{ route('admin.thesis.index') }}"
-                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Kembali
-            </a>
+@extends('layouts.admin')
+
+@php
+    // Menentukan apakah ini form untuk membuat data baru atau mengedit data lama
+    $isEdit = isset($thesis);
+    $formAction = $isEdit ? route('admin.thesis.update', $thesis) : route('admin.thesis.store');
+@endphp
+
+@section('title', $isEdit ? 'Edit Tugas Akhir' : 'Tambah Tugas Akhir')
+
+@section('content')
+    {{-- Header Halaman --}}
+    <header class="py-10 mb-4 bg-gradient-primary-to-secondary">
+        <div class="container-xl px-4">
+            <div class="text-center">
+                <h1 class="text-white">{{ $isEdit ? 'Edit Tugas Akhir' : 'Tambah Tugas Akhir' }}</h1>
+                <p class="lead mb-0 text-white-50">Lengkapi data tugas akhir di bawah ini</p>
+            </div>
         </div>
-    </x-slot>
+    </header>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <form method="POST" action="{{ route('admin.thesis.store') }}">
-                        @csrf
+    {{-- Konten Utama --}}
+    <div class="container-xl px-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div><i class="me-2" data-feather="book-open"></i>Formulir Tugas Akhir</div>
+                        <a href="{{ route('admin.thesis.index') }}" class="btn btn-sm btn-light">
+                            <i class="me-2" data-feather="arrow-left"></i>Kembali
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ $formAction }}">
+                            @csrf
+                            @if ($isEdit)
+                                @method('PUT')
+                            @endif
 
-                        <!-- Title -->
-                        <div class="mb-6">
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                                Judul <span class="text-red-500">*</span>
-                            </label>
-                            <textarea name="title" id="title" rows="3"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('title') border-red-300 @enderror"
-                                required>{{ old('title') }}</textarea>
-                            @error('title')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Judul <span class="text-danger">*</span></label>
+                                <textarea name="title" id="title" rows="3" class="form-control @error('title') is-invalid @enderror"
+                                    required>{{ old('title', $thesis->title ?? '') }}</textarea>
+                                @error('title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Author -->
-                        <div class="mb-6">
-                            <label for="author" class="block text-sm font-medium text-gray-700 mb-2">
-                                Penulis <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="author" id="author" value="{{ old('author') }}"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('author') border-red-300 @enderror"
-                                required>
-                            @error('author')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div class="mb-3">
+                                <label for="author" class="form-label">Penulis <span class="text-danger">*</span></label>
+                                <input type="text" name="author" id="author"
+                                    value="{{ old('author', $thesis->author ?? '') }}"
+                                    class="form-control @error('author') is-invalid @enderror" required>
+                                @error('author')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Type -->
-                        <div class="mb-6">
-                            <label for="type" class="block text-sm font-medium text-gray-700 mb-2">
-                                Jenis <span class="text-red-500">*</span>
-                            </label>
-                            <select name="type" id="type"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('type') border-red-300 @enderror"
-                                required>
-                                <option value="">Pilih Jenis</option>
-                                @foreach ($types as $key => $value)
-                                    <option value="{{ $key }}" {{ old('type') == $key ? 'selected' : '' }}>
-                                        {{ $value }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('type')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div class="row gx-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="type" class="form-label">Jenis <span
+                                            class="text-danger">*</span></label>
+                                    <select name="type" id="type"
+                                        class="form-select @error('type') is-invalid @enderror" required>
+                                        <option value="">Pilih Jenis</option>
+                                        @foreach ($types as $key => $value)
+                                            <option value="{{ $key }}"
+                                                {{ old('type', $thesis->type ?? '') == $key ? 'selected' : '' }}>
+                                                {{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('type')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="year" class="form-label">Tahun <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" name="year" id="year"
+                                        value="{{ old('year', $thesis->year ?? date('Y')) }}" min="1900"
+                                        max="{{ date('Y') + 1 }}" class="form-control @error('year') is-invalid @enderror"
+                                        required>
+                                    @error('year')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
-                        <!-- Program Study -->
-                        <div class="mb-6">
-                            <label for="program_study" class="block text-sm font-medium text-gray-700 mb-2">
-                                Program Studi <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="program_study" id="program_study"
-                                value="{{ old('program_study', $thesis->program_study) }}"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('program_study') border-red-300 @enderror"
-                                required>
-                            @error('program_study')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div class="mb-3">
+                                <label for="program_study" class="form-label">Program Studi <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="program_study" id="program_study"
+                                    value="{{ old('program_study', $thesis->program_study ?? '') }}"
+                                    class="form-control @error('program_study') is-invalid @enderror" required>
+                                @error('program_study')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Year -->
-                        <div class="mb-6">
-                            <label for="year" class="block text-sm font-medium text-gray-700 mb-2">
-                                Tahun <span class="text-red-500">*</span>
-                            </label>
-                            <input type="number" name="year" id="year"
-                                value="{{ old('year', $thesis->year) }}" min="1900" max="{{ date('Y') + 1 }}"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('year') border-red-300 @enderror"
-                                required>
-                            @error('year')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div class="mb-3">
+                                <label for="abstract" class="form-label">Abstrak <span class="text-danger">*</span></label>
+                                <textarea name="abstract" id="abstract" rows="8" class="form-control @error('abstract') is-invalid @enderror"
+                                    required>{{ old('abstract', $thesis->abstract ?? '') }}</textarea>
+                                @error('abstract')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Abstract -->
-                        <div class="mb-6">
-                            <label for="abstract" class="block text-sm font-medium text-gray-700 mb-2">
-                                Abstrak <span class="text-red-500">*</span>
-                            </label>
-                            <textarea name="abstract" id="abstract" rows="8"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('abstract') border-red-300 @enderror"
-                                required>{{ old('abstract', $thesis->abstract) }}</textarea>
-                            @error('abstract')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="flex items-center justify-end space-x-4">
-                            <a href="{{ route('admin.thesis.index') }}"
-                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
-                                Batal
-                            </a>
-                            <button type="submit"
-                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-                                Update
-                            </button>
-                        </div>
-                    </form>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ route('admin.thesis.index') }}" class="btn btn-secondary">Batal</a>
+                                <button type="submit" class="btn btn-primary">{{ $isEdit ? 'Update' : 'Simpan' }}</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection
