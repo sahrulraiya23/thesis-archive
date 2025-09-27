@@ -1,153 +1,220 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                @php
-                    $totalThesis = App\Models\Thesis::count();
-                    $thisYearThesis = App\Models\Thesis::whereYear('created_at', date('Y'))->count();
-                    $thesisTypes = App\Models\Thesis::selectRaw('type, COUNT(*) as count')
-                        ->groupBy('type')
-                        ->pluck('count', 'type')
-                        ->toArray();
-                @endphp
+@section('title', 'Dashboard - Sistem Pengarsipan Tugas Akhir')
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 bg-indigo-500 rounded-md">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Tugas Akhir</p>
-                                <p class="text-2xl font-semibold text-gray-900">{{ $totalThesis }}</p>
-                            </div>
-                        </div>
-                    </div>
+@section('header')
+    <h1 class="text-4xl font-bold mb-2">Selamat Datang Di Sistem Pengarsipan Tugas Akhir</h1>
+    <p class="text-xl text-white/80">Teknik Informatika - Universitas Halu Oleo</p>
+@endsection
+
+@section('content')
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Dashboard Overview</h2>
+        <p class="text-gray-600">Ringkasan sistem pengarsipan tugas akhir</p>
+        <hr class="my-4 border-gray-300">
+    </div>
+
+    @php
+        $totalThesis = App\Models\Thesis::count();
+        $thisYearThesis = App\Models\Thesis::whereYear('created_at', date('Y'))->count();
+        $thesisTypes = App\Models\Thesis::selectRaw('type, COUNT(*) as count')
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
+        $recentThesis = App\Models\Thesis::latest()->limit(5)->get();
+    @endphp
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Tugas Akhir -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-blue-500 rounded-lg">
+                    <i data-feather="book" class="w-6 h-6 text-white"></i>
                 </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 bg-green-500 rounded-md">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Tahun {{ date('Y') }}</p>
-                                <p class="text-2xl font-semibold text-gray-900">{{ $thisYearThesis }}</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Total Tugas Akhir</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $totalThesis }}</p>
                 </div>
+            </div>
+        </div>
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-2 bg-purple-500 rounded-md">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Jenis Terbanyak</p>
-                                <p class="text-2xl font-semibold text-gray-900">
-                                    {{ !empty($thesisTypes) ? ucfirst(array_keys($thesisTypes, max($thesisTypes))[0]) : 'N/A' }}
-                                </p>
-                            </div>
+        <!-- Tahun Ini -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-green-500 rounded-lg">
+                    <i data-feather="calendar" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Tahun {{ date('Y') }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $thisYearThesis }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skripsi -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-purple-500 rounded-lg">
+                    <i data-feather="file-text" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Skripsi</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $thesisTypes['skripsi'] ?? 0 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tesis -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-orange-500 rounded-lg">
+                    <i data-feather="award" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Tesis</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $thesisTypes['tesis'] ?? 0 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Recent Thesis -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <i data-feather="clock" class="w-5 h-5 mr-2"></i>
+                        Tugas Akhir Terbaru
+                    </h3>
+                </div>
+                <div class="p-6">
+                    @if ($recentThesis->count() > 0)
+                        <div class="space-y-4">
+                            @foreach ($recentThesis as $thesis)
+                                <div class="flex items-start space-x-4 p-4 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                            <i data-feather="file-text" class="w-5 h-5 text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-sm font-medium text-gray-900 mb-1">
+                                            <a href="{{ route('public.thesis.show', $thesis) }}"
+                                                class="hover:text-blue-600 transition-colors">
+                                                {{ Str::limit($thesis->title, 80) }}
+                                            </a>
+                                        </h4>
+                                        <p class="text-sm text-gray-600 mb-2">
+                                            {{ $thesis->author }} • {{ $thesis->program_study }}
+                                        </p>
+                                        <div class="flex items-center space-x-3">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {{ ucfirst($thesis->type) }}
+                                            </span>
+                                            <span class="text-xs text-gray-500">{{ $thesis->year }}</span>
+                                            <span
+                                                class="text-xs text-gray-500">{{ $thesis->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
+
+                        <div class="mt-6 text-center">
+                            <a href="{{ route('public.thesis.index') }}"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors">
+                                Lihat Semua Tugas Akhir
+                                <i data-feather="arrow-right" class="w-4 h-4 ml-2"></i>
+                            </a>
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <i data-feather="book" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+                            <p class="text-gray-500">Belum ada tugas akhir yang tersedia</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Stats -->
+        <div class="space-y-6">
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <i data-feather="zap" class="w-5 h-5 mr-2"></i>
+                        Quick Actions
+                    </h3>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-3">
+                        <a href="{{ route('public.thesis.index') }}"
+                            class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                            <i data-feather="search" class="w-4 h-4 mr-3 text-blue-500"></i>
+                            Jelajahi Tugas Akhir
+                        </a>
+                        <a href="{{ route('plagiarism.check') }}"
+                            class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                            <i data-feather="shield" class="w-4 h-4 mr-3 text-green-500"></i>
+                            Cek Plagiarisme Judul
+                        </a>
+                        @if (Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.thesis.create') }}"
+                                class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <i data-feather="plus" class="w-4 h-4 mr-3 text-purple-500"></i>
+                                Tambah Tugas Akhir
+                            </a>
+                            <a href="{{ route('admin.thesis.index') }}"
+                                class="flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <i data-feather="settings" class="w-4 h-4 mr-3 text-orange-500"></i>
+                                Kelola Data
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Welcome Message -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-semibold mb-4">Selamat datang, {{ Auth::user()->name }}!</h3>
-
-                    @if (Auth::user()->role === 'admin')
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="font-medium text-gray-900 mb-2">Menu Admin</h4>
-                                <ul class="space-y-2">
-                                    <li>
-                                        <a href="{{ route('admin.thesis.index') }}"
-                                            class="text-indigo-600 hover:text-indigo-900 hover:underline">
-                                            Kelola Tugas Akhir
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.thesis.create') }}"
-                                            class="text-indigo-600 hover:text-indigo-900 hover:underline">
-                                            Tambah Tugas Akhir Baru
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-medium text-gray-900 mb-2">Quick Stats</h4>
-                                <ul class="space-y-2 text-sm text-gray-600">
-                                    @foreach ($thesisTypes as $type => $count)
-                                        <li>{{ ucfirst($type) }}: {{ $count }} buah</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+            <!-- Distribution Chart -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <i data-feather="pie-chart" class="w-5 h-5 mr-2"></i>
+                        Distribusi Jenis
+                    </h3>
+                </div>
+                <div class="p-6">
+                    @if (!empty($thesisTypes))
+                        <div class="space-y-4">
+                            @foreach ($thesisTypes as $type => $count)
+                                @php
+                                    $percentage = $totalThesis > 0 ? round(($count / $totalThesis) * 100, 1) : 0;
+                                @endphp
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm font-medium text-gray-900">{{ ucfirst($type) }}</span>
+                                        <span class="text-sm text-gray-600">{{ $count }}
+                                            ({{ $percentage }}%)</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
+                                            style="width: {{ $percentage }}%"></div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @else
-                        <div>
-                            <p class="text-gray-600 mb-4">
-                                Sistem Pengarsipan Tugas Akhir menyediakan akses mudah untuk mencari dan melihat koleksi
-                                tugas akhir.
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-900 mb-2">Fitur Tersedia</h4>
-                                    <ul class="space-y-2 text-sm text-gray-600">
-                                        <li>• Pencarian tugas akhir</li>
-                                        <li>• Filter berdasarkan jenis dan tahun</li>
-                                        <li>• Cek plagiarisme judul</li>
-                                        <li>• Lihat detail dan abstrak</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium text-gray-900 mb-2">Menu Utama</h4>
-                                    <ul class="space-y-2">
-                                        <li>
-                                            <a href="{{ route('public.thesis.index') }}"
-                                                class="text-indigo-600 hover:text-indigo-900 hover:underline">
-                                                Jelajahi Tugas Akhir
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('plagiarism.check') }}"
-                                                class="text-indigo-600 hover:text-indigo-900 hover:underline">
-                                                Cek Plagiarisme Judul
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="text-center py-4">
+                            <p class="text-gray-500 text-sm">Tidak ada data untuk ditampilkan</p>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

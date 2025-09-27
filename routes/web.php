@@ -1,12 +1,20 @@
 <?php
 
-use App\Http\Controllers\Admin\ThesisController as AdminThesisController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ThesisController as AdminThesisController;
+
+// Redirect root ke dashboard jika login, kalau tidak ke thesis list
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('public.thesis.index');
+});
 
 // Public routes
-Route::get('/', [PublicController::class, 'thesisIndex'])->name('home');
 Route::get('/thesis', [PublicController::class, 'thesisIndex'])->name('public.thesis.index');
 Route::get('/thesis/{thesis}', [PublicController::class, 'thesisShow'])->name('public.thesis.show');
 Route::get('/plagiarism-check', [PublicController::class, 'plagiarismCheck'])->name('plagiarism.check');
@@ -24,8 +32,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('thesis', AdminThesisController::class);
-});
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('thesis', AdminThesisController::class);
+    });
 
 require __DIR__ . '/auth.php';
