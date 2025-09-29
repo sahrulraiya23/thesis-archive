@@ -1,61 +1,257 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Thesis Archive
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web berbasis Laravel untuk mengelola dan mengarsipkan skripsi, tesis, dan disertasi secara digital. Sistem ini dilengkapi dengan fitur pencarian, manajemen konten, dan pengecekan plagiarisme.
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-12.0-FF2D20?style=flat&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 👥 Untuk Pengguna
+- 🔍 **Pencarian Karya Ilmiah** - Cari skripsi, tesis, atau disertasi dengan mudah
+- 📖 **Detail Lengkap** - Lihat informasi lengkap termasuk abstrak dan metadata
+- 🔒 **Pengecekan Plagiarisme** - Verifikasi keaslian karya ilmiah
+- 📱 **Responsif** - Akses dari berbagai perangkat
 
-## Learning Laravel
+### 🛠️ Untuk Administrator
+- ➕ **Manajemen CRUD** - Kelola data karya ilmiah secara lengkap
+- 👨‍💼 **Manajemen Pengguna** - Kontrol akses dan peran pengguna
+- 📊 **Dashboard Admin** - Pantau statistik dan aktivitas sistem
+- 🔐 **Keamanan Tingkat Lanjut** - Sistem autentikasi dan otorisasi yang aman
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Teknologi
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Framework**: Laravel 12.x
+- **PHP**: 8.2 atau lebih tinggi
+- **Database**: MySQL/PostgreSQL
+- **Frontend**: Blade Templates + Vite
+- **Package Manager**: Composer & NPM
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📋 Prasyarat
 
-### Premium Partners
+Pastikan sistem Anda telah menginstal:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP >= 8.2
+- Composer
+- Node.js >= 18.x dan NPM
+- MySQL >= 5.7 atau PostgreSQL >= 12
+- Git
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔧 Instalasi
 
-## Code of Conduct
+### 1. Clone Repositori
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/sahrulraiya23/thesis-archive.git
+cd thesis-archive
+```
 
-## Security Vulnerabilities
+### 2. Install Dependencies
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# Install PHP dependencies
+composer install
 
-## License
+# Install Node.js dependencies
+npm install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 3. Konfigurasi Environment
+
+```bash
+# Salin file environment
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+```
+
+Edit file `.env` dan sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=thesis_archive
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 4. Setup Database
+
+```bash
+# Jalankan migrasi
+php artisan migrate
+
+# Jalankan seeder (opsional - untuk data awal)
+php artisan db:seed
+```
+
+### 5. Jalankan Aplikasi
+
+```bash
+# Terminal 1: Laravel Development Server
+php artisan serve
+
+# Terminal 2: Vite Development Server
+npm run dev
+```
+
+Aplikasi akan berjalan di `http://localhost:8000`
+
+---
+
+## 🗺️ Struktur Rute
+
+### Rute Publik
+
+| Method | URI | Deskripsi |
+|--------|-----|-----------|
+| GET | `/` | Halaman utama |
+| GET | `/thesis` | Daftar karya ilmiah |
+| GET | `/thesis/{id}` | Detail karya ilmiah |
+| GET | `/plagiarism-check` | Halaman cek plagiarisme |
+| POST | `/plagiarism-check` | Proses cek plagiarisme |
+
+### Rute Autentikasi
+
+| Method | URI | Deskripsi |
+|--------|-----|-----------|
+| GET | `/dashboard` | Dashboard pengguna |
+| GET | `/profile` | Halaman profil |
+| PATCH | `/profile` | Update profil |
+| DELETE | `/profile` | Hapus akun |
+
+### Rute Admin (Middleware: auth, admin)
+
+| Method | URI | Deskripsi |
+|--------|-----|-----------|
+| GET | `/admin/thesis` | Daftar karya ilmiah (admin) |
+| GET | `/admin/thesis/create` | Form tambah karya ilmiah |
+| POST | `/admin/thesis` | Simpan karya ilmiah baru |
+| GET | `/admin/thesis/{id}` | Detail karya ilmiah (admin) |
+| GET | `/admin/thesis/{id}/edit` | Form edit karya ilmiah |
+| PUT/PATCH | `/admin/thesis/{id}` | Update karya ilmiah |
+| DELETE | `/admin/thesis/{id}` | Hapus karya ilmiah |
+
+---
+
+## 🗄️ Struktur Database
+
+### Tabel `users`
+
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| id | BIGINT | Primary Key |
+| name | VARCHAR(255) | Nama lengkap |
+| email | VARCHAR(255) | Email (unique) |
+| password | VARCHAR(255) | Password (hashed) |
+| role | ENUM | 'admin' atau 'user' (default: 'user') |
+| created_at | TIMESTAMP | - |
+| updated_at | TIMESTAMP | - |
+
+### Tabel `thesis`
+
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| id | BIGINT | Primary Key |
+| title | VARCHAR(255) | Judul karya ilmiah |
+| abstract | TEXT | Abstrak |
+| type | ENUM | 'skripsi', 'tesis', 'disertasi' |
+| author | VARCHAR(255) | Nama penulis |
+| program_study | VARCHAR(255) | Program studi |
+| year | YEAR | Tahun publikasi |
+| created_at | TIMESTAMP | - |
+| updated_at | TIMESTAMP | - |
+
+---
+
+## 👤 Akun Default
+
+Setelah menjalankan seeder, gunakan akun berikut untuk login:
+
+**Admin**
+- Email: `admin@example.com`
+- Password: `password`
+
+**User**
+- Email: `user@example.com`
+- Password: `password`
+
+> ⚠️ **Penting**: Ubah password default setelah login pertama kali!
+
+---
+
+## 📦 Build untuk Production
+
+```bash
+# Build assets
+npm run build
+
+# Optimize aplikasi
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Set environment ke production di .env
+APP_ENV=production
+APP_DEBUG=false
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Jalankan semua test
+php artisan test
+
+# Test dengan coverage
+php artisan test --coverage
+```
+
+---
+
+## 🤝 Kontribusi
+
+Kontribusi selalu diterima dengan baik! Berikut langkah-langkahnya:
+
+1. Fork repositori ini
+2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
+
+---
+
+## 📝 License
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+---
+
+## 👨‍💻 Author
+
+**Sahrul Raiya**
+- GitHub: [@sahrulraiya23](https://github.com/sahrulraiya23)
+
+---
+
+## 📞 Support
+
+Jika Anda menemukan bug atau memiliki saran, silakan buat [issue](https://github.com/sahrulraiya23/thesis-archive/issues) di repositori ini.
+
+---
+
+<div align="center">
+Dibuat dengan ❤️ menggunakan Laravel
+</div>
