@@ -9,6 +9,10 @@
                     <div class="nav-link-icon"><i data-feather="globe"></i></div>
                     Daftar TA
                 </a>
+                <a class="nav-link" href="{{ route('plagiarism.check') }}">
+                    <div class="nav-link-icon"><i data-feather="globe"></i></div>
+                    Cek Plagiarisme Judul
+                </a>
 
                 {{-- Tampilkan menu ini hanya untuk user yang login --}}
                 @auth
@@ -16,6 +20,7 @@
                         <div class="nav-link-icon"><i data-feather="activity"></i></div>
                         Dashboard
                     </a>
+
 
                     {{-- Tampilkan menu ini hanya untuk admin --}}
                     @if (Auth::user()->role === 'admin')
